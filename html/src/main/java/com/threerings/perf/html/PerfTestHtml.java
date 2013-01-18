@@ -1,3 +1,7 @@
+//
+// PlayN Performance Tests
+// http://github.com/threerings/playn-perf/blob/master/LICENSE
+
 package com.threerings.perf.html;
 
 import playn.core.PlayN;

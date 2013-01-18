@@ -1,31 +1,32 @@
+//
+// PlayN Performance Tests
+// http://github.com/threerings/playn-perf/blob/master/LICENSE
+
 package com.threerings.perf.core;
 
+import playn.core.Game;
 import static playn.core.PlayN.*;
 
-import playn.core.Game;
-import playn.core.Image;
-import playn.core.ImageLayer;
+import tripleplay.game.ScreenStack;
 
-public class PerfTest implements Game {
-  @Override
-  public void init() {
-    // create and add background image layer
-    Image bgImage = assets().getImage("images/bg.png");
-    ImageLayer bgLayer = graphics().createImageLayer(bgImage);
-    graphics().rootLayer().add(bgLayer);
-  }
+public class PerfTest implements Game
+{
+    public static final ScreenStack stack = new ScreenStack();
 
-  @Override
-  public void paint(float alpha) {
-    // the background automatically paints itself, so no need to do anything here!
-  }
+    @Override public void init () {
+        // create and show our main menu
+        stack.push(new TestMenu());
+    }
 
-  @Override
-  public void update(float delta) {
-  }
+    @Override public void paint (float alpha) {
+        stack.paint(alpha);
+    }
 
-  @Override
-  public int updateRate() {
-    return 25;
-  }
+    @Override public void update (float delta) {
+        stack.update(delta);
+    }
+
+    @Override public int updateRate () {
+        return 30;
+    }
 }
