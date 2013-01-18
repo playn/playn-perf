@@ -1,0 +1,11 @@
+<module rename-to='playn-perf'>
+  <inherits name='playn.PlayN'/>
+  <inherits name='PerfTestAssets'/>
+
+  <source path='core'/>
+  <source path='html'/>
+
+  <public path="resources" />
+
+  <entry-point class='com.threerings.perf.html.PerfTestHtml'/>
+</module>

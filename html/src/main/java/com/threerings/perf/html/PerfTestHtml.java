@@ -1,0 +1,17 @@
+package com.threerings.perf.html;
+
+import playn.core.PlayN;
+import playn.html.HtmlGame;
+import playn.html.HtmlPlatform;
+
+import com.threerings.perf.core.PerfTest;
+
+public class PerfTestHtml extends HtmlGame {
+
+  @Override
+  public void start() {
+    HtmlPlatform platform = HtmlPlatform.register();
+    platform.assets().setPathPrefix("playn-perf/");
+    PlayN.run(new PerfTest());
+  }
+}
