@@ -5,7 +5,7 @@ import net.virtualvoid.sbt.graph.Plugin.graphSettings
 
 object PerfTestBuild extends Build {
   val builder = new ProjectBuilder("pom.xml") {
-    override val globalSettings = graphSettings ++ Seq(
+    override val globalSettings = graphSettings ++ seq(
       crossPaths    := false,
       scalaVersion  := "2.9.2",
       javacOptions  ++= Seq("-Xlint", "-Xlint:-serial", "-source", "1.6", "-target", "1.6"),
@@ -21,7 +21,9 @@ object PerfTestBuild extends Build {
           "com.novocode" % "junit-interface" % "0.7" % "test->default"
         )
       )
-      case "java" | "vtest" => LWJGLPlugin.lwjglSettings
+      case "java" => LWJGLPlugin.lwjglSettings ++ seq(
+        javaOptions   ++= Seq("-verbose:gc", "-XX:+PrintGCDetails", "-XX:+PrintGCTimeStamps")
+      )
       case _ => Nil
     }
   }

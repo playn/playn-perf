@@ -14,7 +14,6 @@ public class PerfTest implements Game
     public static final ScreenStack stack = new ScreenStack();
 
     @Override public void init () {
-        // create and show our main menu
         stack.push(new TestMenu());
     }
 

@@ -9,13 +9,12 @@ import pythagoras.d.Vector;
 
 import playn.core.Image;
 
-import react.Functions;
 import react.IntValue;
-import react.Slot;
-import react.UnitSlot;
 import react.Value;
 
 import tripleplay.ui.Label;
+import tripleplay.util.DestroyableList;
+import tripleplay.util.Hud;
 import tripleplay.util.Ref;
 
 /**
@@ -29,37 +28,39 @@ public class ManyQuadsOneTex extends AbstractTest
         public AbstractTest create() {  return new ManyQuadsOneTex(); }
     };
 
-    public ManyQuadsOneTex () {
-        _count.connectNotify(new Slot<Integer>() { public void onEmit (Integer count) {
-            _bodies.set(Bodies.bounded(count, width(), height()));
-            getImage("pea.png").addCallback(new CB<Image>() {
-                public void onSuccess (Image image) {
-                    _bodies.get().init(layer, Bodies.singleImageViz(image),
-                                       Bodies.random(width(), height(), 0.1f));
-                }
-            });
+    @Override public void onTap () {
+        final Bodies bods = _bods.add(Bodies.bounded(BATCH, width(), height()));
+        _pea.addCallback(new CB<Image>() { public void onSuccess (Image image) {
+            bods.init(layer, Bodies.singleImageViz(image),
+                      Bodies.random(width(), height(), 0.1f));
         }});
+        _count.update(_bods.size()*BATCH);
+    }
+
+    @Override public void wasShown () {
+        super.wasShown();
+        onTap();
     }
 
     @Override public void update (float delta) {
         super.update(delta);
-        _bodies.get().update(delta);
+        for (int ii = 0, ll = _bods.size(); ii < ll; ii++) _bods.get(ii).update(delta);
     }
 
     @Override public void paint (float alpha) {
         super.paint(alpha);
-        _bodies.get().paint(alpha);
+        for (int ii = 0, ll = _bods.size(); ii < ll; ii++) _bods.get(ii).paint(alpha);
     }
 
     @Override protected void addHudBits (Hud hud) {
-        hud.addLabel("Bodies:", _count);
-        hud.add(button("Less", new UnitSlot() {
-            public void onEmit () { _count.decrementClamp(500, 500); }
-        }), button("More", new UnitSlot() {
-            public void onEmit () { _count.increment(500); }
-        }));
+        hud.add("ManyQuadsOneTex:", true);
+        hud.add("Bodies:", _count);
+        hud.add("Tap HUD to add bodies", false);
     }
 
-    protected final IntValue _count = new IntValue(500);
-    protected final Ref<Bodies> _bodies = Ref.<Bodies>create(null);
+    protected final Image _pea = getImage("pea.png");
+    protected final IntValue _count = new IntValue(0);
+    protected final DestroyableList<Bodies> _bods = DestroyableList.create();
+
+    protected static final int BATCH = 1000;
 }

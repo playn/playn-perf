@@ -4,59 +4,124 @@
 
 package com.threerings.perf.core;
 
-import react.UnitSlot;
+import java.util.HashSet;
+import java.util.Set;
+
 import react.Value;
 
 import playn.core.Image;
+import playn.core.Key;
+import playn.core.Keyboard;
+import playn.core.Mouse;
+import playn.core.Touch;
+import playn.core.gl.GLContext;
 import static playn.core.PlayN.assets;
+import static playn.core.PlayN.graphics;
+import static playn.core.PlayN.keyboard;
 
-import tripleplay.game.UIScreen;
-import tripleplay.ui.Background;
-import tripleplay.ui.Button;
-import tripleplay.ui.Label;
-import tripleplay.ui.Root;
-import tripleplay.ui.SimpleStyles;
-import tripleplay.ui.Style;
-import tripleplay.ui.TextWidget;
-import tripleplay.ui.layout.TableLayout;
+import tripleplay.game.Screen;
+import tripleplay.util.Hud;
 import tripleplay.util.Ref;
 
 /**
  * The base class for a performance test.
  */
-public abstract class AbstractTest extends UIScreen
+public abstract class AbstractTest extends Screen
 {
     /** Simplifies creating and pushing test screens. */
     public interface Thunk {
         AbstractTest create ();
     }
 
+    /** Called when the user taps/clicks once. */
+    public void onTap () {
+    }
+
     @Override public void wasShown () {
         super.wasShown();
-        _hud.set(new Hud()).add(new Label("HUD"), button("Back", new UnitSlot() {
-            public void onEmit () { PerfTest.stack.remove(AbstractTest.this); }
-        }));
-        _hud.get().addLabel("FPS:", _fps);
-        addHudBits(_hud.get());
-        updateHud();
+        _hud.add("Shader info:", true);
+        _hud.add(_quadShader);
+        _hud.add(_trisShader);
+        _hud.add("Per second:", true);
+        _hud.add("Frames:", _frames);
+        _hud.add("Shader creates:", _shaderCreates);
+        _hud.add("FB creates:", _fbCreates);
+        _hud.add("Tex creates:", _texCreates);
+        _hud.add("Per frame:", true);
+        _hud.add("Shader binds:", _shaderBinds);
+        _hud.add("FB binds:", _fbBinds);
+        _hud.add("Tex binds:", _texBinds);
+        _hud.add("Quads drawn:", _rQuads);
+        _hud.add("Tris drawn:", _rTris);
+        _hud.add("Shader flushes:", _shaderFlushes);
+        addHudBits(_hud);
+        _hud.layer.setDepth(Short.MAX_VALUE);
+        layer.add(_hud.layer);
+
+        // wire up listeners for tapping and going back to the menu
+        _hud.layer.addListener(new Mouse.LayerAdapter() {
+            @Override public void onMouseDown(Mouse.ButtonEvent event) {
+                switch (event.button()) {
+                case Mouse.BUTTON_RIGHT: pop(); break;
+                case Mouse.BUTTON_LEFT: onTap(); break;
+                default: break;
+                }
+            }
+        });
+        _hud.layer.addListener(new Touch.LayerAdapter() {
+            @Override public void onTouchStart(Touch.Event event) {
+                // Android and iOS handle touch events rather differently, so we need to do this
+                // finagling to determine whether there is an active two finger touch
+                _active.add(event.id());
+                if (_active.size() > 1) pop();
+                else onTap();
+            }
+            @Override public void onTouchEnd(Touch.Event event) {
+                _active.remove(event.id());
+            }
+            @Override public void onTouchCancel(Touch.Event event) {
+                _active.remove(event.id());
+            }
+            protected Set<Integer> _active = new HashSet<Integer>();
+        });
+        keyboard().setListener(new Keyboard.Adapter() {
+            @Override public void onKeyDown(Keyboard.Event event) {
+                if (event.key() == Key.ESCAPE || event.key() == Key.BACK) pop();
+            }
+        });
     }
 
     @Override public void wasHidden () {
         super.wasHidden();
-        _hud.clear();
+        keyboard().setListener(null);
     }
 
     @Override public void update (float delta) {
         super.update(delta);
-        _elapsed += delta;
-        if (_elapsed > 1000) {
-            updateHud();
-            _elapsed -= 1000;
+        long now = System.currentTimeMillis();
+        if (now > _nextSec) {
+            GLContext.Stats stats = graphics().ctx().stats();
+            int frames = stats.frames;
+            _quadShader.update("Quad: " + graphics().ctx().quadShaderInfo());
+            _trisShader.update("Tris: " + graphics().ctx().trisShaderInfo());
+            _frames.update(frames);
+            _shaderCreates.update(stats.shaderCreates);
+            _fbCreates.update(stats.frameBufferCreates);
+            _texCreates.update(stats.texCreates);
+            _shaderBinds.update(stats.shaderBinds/frames);
+            _fbBinds.update(stats.frameBufferBinds/frames);
+            _texBinds.update(stats.texBinds/frames);
+            _rQuads.update(stats.quadsRendered/frames);
+            _rTris.update(stats.trisRendered/frames);
+            _shaderFlushes.update(stats.shaderFlushes/frames);
+            stats.reset();
+            _hud.update();
+            _nextSec = now + 1000;
         }
     }
 
-    @Override public void paint (float alpha) {
-        super.paint(alpha);
+    protected void pop () {
+        PerfTest.stack.remove(this);
     }
 
     protected Image getImage (String path) {
@@ -67,48 +132,20 @@ public abstract class AbstractTest extends UIScreen
     protected void addHudBits (Hud hud) {
     }
 
-    protected void updateHud () {
-        _hud.get().pack();
-    }
+    private final Hud _hud = new Hud();
+    private long _nextSec;
 
-    protected Button button (String label, UnitSlot onClick) {
-        Button button = new Button(label);
-        button.clicked().connect(onClick);
-        return button;
-    }
+    private final Value<Integer> _frames = Value.create(0);
+    private final Value<Integer> _shaderCreates = Value.create(0);
+    private final Value<Integer> _fbCreates = Value.create(0);
+    private final Value<Integer> _texCreates = Value.create(0);
+    private final Value<Integer> _shaderBinds = Value.create(0);
+    private final Value<Integer> _fbBinds = Value.create(0);
+    private final Value<Integer> _texBinds = Value.create(0);
+    private final Value<Integer> _rQuads = Value.create(0);
+    private final Value<Integer> _rTris = Value.create(0);
+    private final Value<Integer> _shaderFlushes = Value.create(0);
 
-    protected class Hud extends Root {
-        public Hud () {
-            super(iface, new TableLayout(2).gaps(5, 5), SimpleStyles.newSheet());
-            iface.addRoot(this);
-            layer.setDepth(Short.MAX_VALUE); // render above test stuffs
-            AbstractTest.this.layer.add(layer);
-            addStyles(Style.BACKGROUND.is(Background.solid(0xFF99CCFF).inset(10)));
-        }
-
-        public Value<String> addLabel (String label) {
-            Label value = new Label();
-            add(new Label(label), value);
-            return value.text;
-        }
-
-        public void addLabel (String label, final Value<Integer> value) {
-            add(new Label(label), new IntLabel(value));
-        }
-    }
-
-    protected static class IntLabel extends TextWidget<IntLabel> {
-        public final Value<Integer> value;
-        public IntLabel (Value<Integer> value) {
-            this.value = value;
-            value.connect(textDidChange());
-        }
-        @Override protected Image icon () { return null; }
-        @Override protected String text () { return value.get().toString(); }
-        @Override protected Class<?> getStyleClass () { return Label.class; }
-    }
-
-    private final Ref<Hud> _hud = Ref.<Hud>create(null);
-    private final Value<Integer> _fps = Value.create(0);
-    private float _elapsed;
+    private final Value<String> _quadShader = Value.create("");
+    private final Value<String> _trisShader = Value.create("");
 }
