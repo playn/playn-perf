@@ -19,18 +19,21 @@ import tripleplay.util.Destroyable;
 public abstract class Bodies
     implements Destroyable
 {
-    /** Creates the visualization for a body. */
+    /** Creates the visualization for a body and adds it to the appropriate parent. */
     public interface Viz {
-        /** Creates the visualization for the {@code index}th body. */
-        Layer createViz (int index);
+        /** Creates the visualization for the {@code index}th body and adds it to the appropriate
+         * parent layer, positioned at {@code x, y}. */
+        Layer createViz (int index, float x, float y);
     }
 
     /** All bodies use the same image for visualization. */
-    public static Viz singleImageViz (final Image image) {
+    public static Viz singleImageViz (final Image image, final GroupLayer parent) {
         return new Viz() {
-            public Layer createViz (int index) {
-                return graphics().createImageLayer(image).
+            public Layer createViz (int index, float x, float y) {
+                Layer layer = graphics().createImageLayer(image).
                     setOrigin(image.width()/2, image.height()/2);
+                parent.addAt(layer, x, y);
+                return layer;
             }
         };
     }
@@ -75,11 +78,11 @@ public abstract class Bodies
      * Creates visualizations for all of the bodies, places them at their initial positions, and
      * adds their visualization layers to {@code parent}.
      */
-    public void init (GroupLayer parent, Viz viz, Init init) {
+    public void init (Viz viz, Init init) {
         float[] data = _data;
         for (int ii = 0, oo = 0, ll = _layers.length; ii < ll; ii++, oo += FIELDS) {
             init.init(ii, data, oo);
-            parent.addAt(_layers[ii] = viz.createViz(ii), data[oo+CX], data[oo+CY]);
+            _layers[ii] = viz.createViz(ii, data[oo+CX], data[oo+CY]);
         }
     }
 

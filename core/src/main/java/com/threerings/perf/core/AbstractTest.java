@@ -28,11 +28,6 @@ import tripleplay.util.Ref;
  */
 public abstract class AbstractTest extends Screen
 {
-    /** Simplifies creating and pushing test screens. */
-    public interface Thunk {
-        AbstractTest create ();
-    }
-
     /** Called when the user taps/clicks once. */
     public void onTap () {
     }
