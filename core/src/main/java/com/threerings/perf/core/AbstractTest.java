@@ -101,9 +101,7 @@ public abstract class AbstractTest extends Screen
         long now = System.currentTimeMillis();
         if (now > _nextSec) {
             GLContext.Stats stats = graphics().ctx().stats();
-            int frames = stats.frames;
-            _quadShader.update("Quad: " + graphics().ctx().quadShaderInfo());
-            _trisShader.update("Tris: " + graphics().ctx().trisShaderInfo());
+            int frames = Math.max(stats.frames, 1);
             _frames.update(frames);
             _shaderCreates.update(stats.shaderCreates);
             _fbCreates.update(stats.frameBufferCreates);
@@ -115,6 +113,8 @@ public abstract class AbstractTest extends Screen
             _rTris.update(stats.trisRendered/frames);
             _shaderFlushes.update(stats.shaderFlushes/frames);
             stats.reset();
+            _quadShader.update("Quad: " + graphics().ctx().quadShaderInfo());
+            _trisShader.update("Tris: " + graphics().ctx().trisShaderInfo());
             _hud.update();
             _nextSec = now + 1000;
         }
