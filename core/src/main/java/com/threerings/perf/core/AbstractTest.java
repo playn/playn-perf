@@ -10,7 +10,6 @@ import java.util.Set;
 import react.Value;
 
 import playn.core.Image;
-import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Mouse;
 import playn.core.Pointer;
@@ -56,7 +55,6 @@ public abstract class AbstractTest extends Screen
             @Override public void onMouseDown(Mouse.ButtonEvent event) {
                 switch (event.button()) {
                 case Mouse.BUTTON_RIGHT: pop(); break;
-                case Mouse.BUTTON_LEFT: onTap(); break;
                 default: break;
                 }
             }
@@ -76,7 +74,12 @@ public abstract class AbstractTest extends Screen
         });
         keyboard().setListener(new Keyboard.Adapter() {
             @Override public void onKeyDown(Keyboard.Event event) {
-                if (event.key() == Key.ESCAPE || event.key() == Key.BACK) pop();
+                switch (event.key()) {
+                case ESCAPE:
+                case BACK: pop(); break;
+                case SPACE: onTap(); break;
+                default: break;
+                }
             }
         });
     }
