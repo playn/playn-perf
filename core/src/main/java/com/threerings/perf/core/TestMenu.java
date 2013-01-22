@@ -4,6 +4,8 @@
 
 package com.threerings.perf.core;
 
+import pythagoras.d.MathUtil;
+
 import react.UnitSlot;
 
 import playn.core.Font;
@@ -26,7 +28,8 @@ public class TestMenu extends UIScreen
 {
     @Override public void wasAdded () {
         super.wasAdded();
-        Root root = _root.set(iface.createRoot(new TableLayout(4).gaps(10, 10),
+        int cols = Math.max(1, MathUtil.ifloor(width() / 200));
+        Root root = _root.set(iface.createRoot(new TableLayout(cols).gaps(10, 10),
                                                SimpleStyles.newSheet(), layer));
         root.addStyles(Style.BACKGROUND.is(Background.solid(0xFF99CCFF).inset(10)),
                        Style.VALIGN.top);
@@ -34,8 +37,9 @@ public class TestMenu extends UIScreen
 
         Background configBG = Background.solid(0xFFCCCCCC).inset(10);
         root.add(TableLayout.colspan(new Label("PlayN Performance Tests").addStyles(
-                                         Style.FONT.is(HEADER_FONT)), 4));
+                                         Style.FONT.is(HEADER_FONT)), cols));
         root.add(BouncingQuads.config().addStyles(Style.BACKGROUND.is(configBG)));
+        root.add(ScrollingQuads.config().addStyles(Style.BACKGROUND.is(configBG)));
     }
 
     @Override public void wasRemoved () {
