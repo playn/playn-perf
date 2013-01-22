@@ -82,6 +82,11 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Content Include="assets\images\bg.png" />
+    <Content Include="assets\images\pea.png" />
+    <Content Include="assets\images\peas0.png" />
+    <Content Include="assets\images\peas1.png" />
+    <Content Include="assets\images\peas2.png" />
+    <Content Include="assets\images\peas3.png" />
     <Content Include="touch-icon-57x57.png" />
   </ItemGroup>
 </Project>
