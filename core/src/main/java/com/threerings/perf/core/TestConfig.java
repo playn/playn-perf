@@ -9,6 +9,7 @@ import react.UnitSlot;
 
 import tripleplay.ui.Button;
 import tripleplay.ui.Constraints;
+import tripleplay.ui.Element;
 import tripleplay.ui.Group;
 import tripleplay.ui.Label;
 import tripleplay.ui.Slider;
@@ -23,7 +24,11 @@ public abstract class TestConfig extends Group
 {
     protected TestConfig () {
         super(new TableLayout(TableLayout.COL.alignLeft(),
-                              TableLayout.COL.alignRight()).gaps(5, 5));
+                              TableLayout.COL.alignLeft()).gaps(5, 5));
+    }
+
+    protected void add (String label, Element<?> elem) {
+        add(new Label(label), elem);
     }
 
     protected void addHeader (String header) {
@@ -33,7 +38,7 @@ public abstract class TestConfig extends Group
     protected void addIntSlider (String label, Slider slider, String minFmt) {
         ValueLabel value = new ValueLabel(slider.value.map(Functions.INT_VALUE)).
             setConstraint(Constraints.minSize(minFmt));
-        add(new Label(label), new Group(AxisLayout.horizontal()).add(slider, value));
+        add(label, new Group(AxisLayout.horizontal()).add(slider, value));
     }
 
     protected void addStartButton () {
