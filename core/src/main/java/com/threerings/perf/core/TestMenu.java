@@ -24,8 +24,8 @@ import tripleplay.util.Ref;
  */
 public class TestMenu extends UIScreen
 {
-    @Override public void wasShown () {
-        super.wasShown();
+    @Override public void wasAdded () {
+        super.wasAdded();
         Root root = _root.set(iface.createRoot(new TableLayout(4).gaps(10, 10),
                                                SimpleStyles.newSheet(), layer));
         root.addStyles(Style.BACKGROUND.is(Background.solid(0xFF99CCFF).inset(10)),
@@ -38,8 +38,8 @@ public class TestMenu extends UIScreen
         root.add(BouncingQuads.config().addStyles(Style.BACKGROUND.is(configBG)));
     }
 
-    @Override public void wasHidden () {
-        super.wasHidden();
+    @Override public void wasRemoved () {
+        super.wasRemoved();
         _root.clear();
     }
 
