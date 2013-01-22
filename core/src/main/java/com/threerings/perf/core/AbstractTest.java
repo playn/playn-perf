@@ -13,11 +13,9 @@ import playn.core.Image;
 import playn.core.Key;
 import playn.core.Keyboard;
 import playn.core.Mouse;
-import playn.core.Touch;
+import playn.core.Pointer;
 import playn.core.gl.GLContext;
-import static playn.core.PlayN.assets;
-import static playn.core.PlayN.graphics;
-import static playn.core.PlayN.keyboard;
+import static playn.core.PlayN.*;
 
 import tripleplay.game.Screen;
 import tripleplay.util.Hud;
@@ -63,21 +61,18 @@ public abstract class AbstractTest extends Screen
                 }
             }
         });
-        _hud.layer.addListener(new Touch.LayerAdapter() {
-            @Override public void onTouchStart(Touch.Event event) {
-                // Android and iOS handle touch events rather differently, so we need to do this
-                // finagling to determine whether there is an active two finger touch
-                _active.add(event.id());
-                if (_active.size() > 1) pop();
+        _hud.layer.addListener(new Pointer.Adapter() {
+            @Override public void onPointerStart(Pointer.Event event) {
+                _tapStart = currentTime();
+            }
+            @Override public void onPointerEnd(Pointer.Event event) {
+                double duration = currentTime() - _tapStart;
+                if (duration > 1000) pop();
                 else onTap();
             }
-            @Override public void onTouchEnd(Touch.Event event) {
-                _active.remove(event.id());
+            @Override public void onPointerCancel(Pointer.Event event) {
             }
-            @Override public void onTouchCancel(Touch.Event event) {
-                _active.remove(event.id());
-            }
-            protected Set<Integer> _active = new HashSet<Integer>();
+            protected double _tapStart;
         });
         keyboard().setListener(new Keyboard.Adapter() {
             @Override public void onKeyDown(Keyboard.Event event) {
