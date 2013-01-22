@@ -87,6 +87,7 @@
     <Content Include="assets\images\peas1.png" />
     <Content Include="assets\images\peas2.png" />
     <Content Include="assets\images\peas3.png" />
+    <Content Include="assets\images\tiles.png" />
     <Content Include="touch-icon-57x57.png" />
   </ItemGroup>
 </Project>
