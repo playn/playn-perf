@@ -31,21 +31,6 @@ public abstract class AbstractTest extends Screen
 
     @Override public void wasShown () {
         super.wasShown();
-        _hud.add("Shader info:", true);
-        _hud.add(_quadShader);
-        _hud.add(_trisShader);
-        _hud.add("Per second:", true);
-        _hud.add("Frames:", _frames);
-        _hud.add("Shader creates:", _shaderCreates);
-        _hud.add("FB creates:", _fbCreates);
-        _hud.add("Tex creates:", _texCreates);
-        _hud.add("Per frame:", true);
-        _hud.add("Shader binds:", _shaderBinds);
-        _hud.add("FB binds:", _fbBinds);
-        _hud.add("Tex binds:", _texBinds);
-        _hud.add("Quads drawn:", _rQuads);
-        _hud.add("Tris drawn:", _rTris);
-        _hud.add("Shader flushes:", _shaderFlushes);
         addHudBits(_hud);
         _hud.layer.setDepth(Short.MAX_VALUE);
         layer.add(_hud.layer);
@@ -91,26 +76,7 @@ public abstract class AbstractTest extends Screen
 
     @Override public void update (float delta) {
         super.update(delta);
-        long now = System.currentTimeMillis();
-        if (now > _nextSec) {
-            GLContext.Stats stats = graphics().ctx().stats();
-            int frames = Math.max(stats.frames, 1);
-            _frames.update(frames);
-            _shaderCreates.update(stats.shaderCreates);
-            _fbCreates.update(stats.frameBufferCreates);
-            _texCreates.update(stats.texCreates);
-            _shaderBinds.update(stats.shaderBinds/frames);
-            _fbBinds.update(stats.frameBufferBinds/frames);
-            _texBinds.update(stats.texBinds/frames);
-            _rQuads.update(stats.quadsRendered/frames);
-            _rTris.update(stats.trisRendered/frames);
-            _shaderFlushes.update(stats.shaderFlushes/frames);
-            stats.reset();
-            _quadShader.update("Quad: " + graphics().ctx().quadShaderInfo());
-            _trisShader.update("Tris: " + graphics().ctx().trisShaderInfo());
-            _hud.update();
-            _nextSec = now + 1000;
-        }
+        _hud.update(delta);
     }
 
     protected void pop () {
@@ -125,20 +91,5 @@ public abstract class AbstractTest extends Screen
     protected void addHudBits (Hud hud) {
     }
 
-    private final Hud _hud = new Hud();
-    private long _nextSec;
-
-    private final Value<Integer> _frames = Value.create(0);
-    private final Value<Integer> _shaderCreates = Value.create(0);
-    private final Value<Integer> _fbCreates = Value.create(0);
-    private final Value<Integer> _texCreates = Value.create(0);
-    private final Value<Integer> _shaderBinds = Value.create(0);
-    private final Value<Integer> _fbBinds = Value.create(0);
-    private final Value<Integer> _texBinds = Value.create(0);
-    private final Value<Integer> _rQuads = Value.create(0);
-    private final Value<Integer> _rTris = Value.create(0);
-    private final Value<Integer> _shaderFlushes = Value.create(0);
-
-    private final Value<String> _quadShader = Value.create("");
-    private final Value<String> _trisShader = Value.create("");
+    private final Hud.Stock _hud = new Hud.Stock();
 }
