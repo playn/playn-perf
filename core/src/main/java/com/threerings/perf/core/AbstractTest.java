@@ -79,6 +79,11 @@ public abstract class AbstractTest extends Screen
         _hud.update(delta);
     }
 
+    @Override public void paint (float alpha) {
+        super.paint(alpha);
+        _hud.paint(alpha);
+    }
+
     protected void pop () {
         PerfTest.stack.remove(this);
     }
