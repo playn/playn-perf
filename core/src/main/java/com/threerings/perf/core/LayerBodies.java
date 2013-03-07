@@ -60,13 +60,18 @@ public class LayerBodies extends Bodies
         }
     }
 
+    /**
+     * Interpolates between current and next coordinates (using {@code alpha}) and updates the
+     * position of all bodies' layers to their appropriate value.
+     */
     @Override public void paint (float alpha) {
         if (_layers[0] == null) return; // not yet initialized
-        super.paint(alpha);
-    }
-
-    @Override protected void paintBody (int idx, float cx, float cy) {
-        _layers[idx].setTranslation(cx, cy);
+        float[] data = _data;
+        for (int ii = 0, oo = 0, ll = count(); ii < ll; ii++, oo += FIELDS) {
+            float cx = data[oo+CX] + alpha * data[oo+DX];
+            float cy = data[oo+CY] + alpha * data[oo+DY];
+            _layers[ii].setTranslation(cx, cy);
+        }
     }
 
     /** The layers that represent each body. */

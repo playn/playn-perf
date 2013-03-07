@@ -71,19 +71,9 @@ public abstract class Bodies
     }
 
     /**
-     * Interpolates between current and next coordinates (using {@code alpha}) and updates the
-     * position of all bodies' layers to their appropriate value.
+     * Handles painting of the bodies (details depend on concrete implementation).
      */
-    public void paint (float alpha) {
-        float[] data = _data;
-        for (int ii = 0, oo = 0, ll = count(); ii < ll; ii++, oo += FIELDS) {
-            float cx = data[oo+CX] + alpha * data[oo+DX];
-            float cy = data[oo+CY] + alpha * data[oo+DY];
-            paintBody(ii, cx, cy);
-        }
-    }
-
-    protected abstract void paintBody (int idx, float cx, float cy);
+    public abstract void paint (float alpha);
 
     protected int count () {
         return _data.length / FIELDS;
@@ -91,6 +81,11 @@ public abstract class Bodies
 
     /** Called before bodies' current position is updated for this frame. */
     protected void willUpdate (float delta) {
+    }
+
+    /** Called before bodies' position delta is computed, but after their current position has been
+     * updated for this frame. */
+    protected void willUpdateDelta (float delta) {
         // if anyone is out of bounds, reverse their velocity
         float bwidth = _width, bheight = _height;
         float[] data = _data;
@@ -99,11 +94,6 @@ public abstract class Bodies
             if (cx < 0 || cx > bwidth) data[oo+VX] *= -1;
             if (cy < 0 || cy > bheight) data[oo+VY] *= -1;
         }
-    }
-
-    /** Called before bodies' position delta is computed, but after their current position has been
-     * updated for this frame. */
-    protected void willUpdateDelta (float delta) {
     }
 
     /** Called after bodies' position and delta have been updated for this frame. */
