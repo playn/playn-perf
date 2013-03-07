@@ -1,5 +1,5 @@
-<module rename-to='playn-perf'>
-  <inherits name='playn.PlayN'/>
+<module rename-to='playnperf'>
+  <inherits name="tripleplay.TriplePlay"/>
   <inherits name='PerfTestAssets'/>
 
   <source path='core'/>
