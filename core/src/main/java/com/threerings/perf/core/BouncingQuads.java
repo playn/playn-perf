@@ -63,8 +63,8 @@ public class BouncingQuads extends AbstractTest
             }
         }
 
-        Bodies bods = _bods.add(Bodies.bounded(BATCH, width(), height()));
-        bods.init(new Bodies.Viz() {
+        LayerBodies bods = new LayerBodies(BATCH, width(), height());
+        bods.init(new LayerBodies.Viz() {
             public Layer createViz (int index, float x, float y) {
                 int image = _rando.nextInt(_images);
                 Image pea = getPea(image, _rando.nextInt(_subImages));
@@ -75,6 +75,7 @@ public class BouncingQuads extends AbstractTest
             }
             protected Random _rando = new Random();
         }, Bodies.random(width(), height(), 0.1f));
+        _bods.add(bods);
         _count.update(_bods.size()*BATCH);
     }
 
