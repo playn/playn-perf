@@ -63,6 +63,7 @@ public abstract class AbstractTest extends Screen
                 case ESCAPE:
                 case BACK: pop(); break;
                 case SPACE: onTap(); break;
+                case H: _hud.layer.setVisible(_hudActive = !_hudActive); break;
                 default: break;
                 }
             }
@@ -76,12 +77,12 @@ public abstract class AbstractTest extends Screen
 
     @Override public void update (float delta) {
         super.update(delta);
-        _hud.update(delta);
+        if (_hudActive) _hud.update(delta);
     }
 
     @Override public void paint (float alpha) {
         super.paint(alpha);
-        _hud.paint(alpha);
+        if (_hudActive) _hud.paint(alpha);
     }
 
     protected void pop () {
@@ -97,4 +98,5 @@ public abstract class AbstractTest extends Screen
     }
 
     private final Hud.Stock _hud = new Hud.Stock();
+    private boolean _hudActive = true;
 }
