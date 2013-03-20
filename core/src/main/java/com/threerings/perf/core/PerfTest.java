@@ -9,23 +9,23 @@ import static playn.core.PlayN.*;
 
 import tripleplay.game.ScreenStack;
 
-public class PerfTest implements Game
+public class PerfTest extends Game.Default
 {
     public static final ScreenStack stack = new ScreenStack();
+
+    public PerfTest () {
+        super(50);
+    }
 
     @Override public void init () {
         stack.push(new TestMenu());
     }
 
-    @Override public void paint (float alpha) {
-        stack.paint(alpha);
-    }
-
-    @Override public void update (float delta) {
+    @Override public void update (int delta) {
         stack.update(delta);
     }
 
-    @Override public int updateRate () {
-        return 30;
+    @Override public void paint (float alpha) {
+        stack.paint(alpha);
     }
 }
