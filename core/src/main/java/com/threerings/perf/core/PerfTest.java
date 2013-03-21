@@ -5,6 +5,7 @@
 package com.threerings.perf.core;
 
 import playn.core.Game;
+import playn.core.util.Clock;
 import static playn.core.PlayN.*;
 
 import tripleplay.game.ScreenStack;
@@ -22,10 +23,14 @@ public class PerfTest extends Game.Default
     }
 
     @Override public void update (int delta) {
+        _clock.update(delta);
         stack.update(delta);
     }
 
     @Override public void paint (float alpha) {
-        stack.paint(alpha);
+        _clock.paint(alpha);
+        stack.paint(_clock);
     }
+
+    protected final Clock.Source _clock = new Clock.Source(50);
 }

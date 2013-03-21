@@ -14,6 +14,7 @@ import playn.core.Keyboard;
 import playn.core.Mouse;
 import playn.core.Pointer;
 import playn.core.gl.GLContext;
+import playn.core.util.Clock;
 import static playn.core.PlayN.*;
 
 import tripleplay.game.Screen;
@@ -75,14 +76,14 @@ public abstract class AbstractTest extends Screen
         keyboard().setListener(null);
     }
 
-    @Override public void update (float delta) {
+    @Override public void update (int delta) {
         super.update(delta);
         if (_hudActive) _hud.update(delta);
     }
 
-    @Override public void paint (float alpha) {
-        super.paint(alpha);
-        if (_hudActive) _hud.paint(alpha);
+    @Override public void paint (Clock clock) {
+        super.paint(clock);
+        if (_hudActive) _hud.paint();
     }
 
     protected void pop () {

@@ -6,6 +6,8 @@ package com.threerings.perf.core;
 
 import java.util.Random;
 
+import playn.core.util.Clock;
+
 import tripleplay.util.Destroyable;
 
 /**
@@ -55,7 +57,7 @@ public abstract class Bodies
      * Updates the coordinates of all the bodies, moving nx/ny into cx/cy and computing new nx/ny
      * based on vx/vy.
      */
-    public void update (float delta) {
+    public void update (int delta) {
         float[] data = _data;
         willUpdate(delta);
         for (int ii = 0, oo = 0, ll = count(); ii < ll; ii++, oo += FIELDS) {
@@ -73,19 +75,19 @@ public abstract class Bodies
     /**
      * Handles painting of the bodies (details depend on concrete implementation).
      */
-    public abstract void paint (float alpha);
+    public abstract void paint (Clock clock);
 
     protected int count () {
         return _data.length / FIELDS;
     }
 
     /** Called before bodies' current position is updated for this frame. */
-    protected void willUpdate (float delta) {
+    protected void willUpdate (int delta) {
     }
 
     /** Called before bodies' position delta is computed, but after their current position has been
      * updated for this frame. */
-    protected void willUpdateDelta (float delta) {
+    protected void willUpdateDelta (int delta) {
         // if anyone is out of bounds, reverse their velocity
         float bwidth = _width, bheight = _height;
         float[] data = _data;
@@ -97,7 +99,7 @@ public abstract class Bodies
     }
 
     /** Called after bodies' position and delta have been updated for this frame. */
-    protected void didUpdate (float delta) {
+    protected void didUpdate (int delta) {
     }
 
     /** The data for each body, as {@code {{cx, cy, dx, dy, vx, vy}, ...}}. */

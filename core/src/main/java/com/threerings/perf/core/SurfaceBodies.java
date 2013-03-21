@@ -6,6 +6,7 @@ package com.threerings.perf.core;
 
 import playn.core.Image;
 import playn.core.Surface;
+import playn.core.util.Clock;
 
 /**
  * Displays a bunch of bodies via {@code Surface.drawImage} calls.
@@ -44,8 +45,8 @@ public class SurfaceBodies extends LayerBodies
     /**
      * Handles painting of the bodies (details depend on concrete implementation).
      */
-    @Override public void paint (float alpha) {
-        _alpha = alpha;
+    @Override public void paint (Clock clock) {
+        _alpha = clock.alpha();
     }
 
     /**

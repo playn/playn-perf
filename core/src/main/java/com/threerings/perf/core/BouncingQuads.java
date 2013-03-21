@@ -15,6 +15,7 @@ import playn.core.Image;
 import playn.core.ImmediateLayer;
 import playn.core.Layer;
 import playn.core.Surface;
+import playn.core.util.Clock;
 import static playn.core.PlayN.graphics;
 
 import react.IntValue;
@@ -102,14 +103,14 @@ public class BouncingQuads extends AbstractTest
         onTap();
     }
 
-    @Override public void update (float delta) {
+    @Override public void update (int delta) {
         super.update(delta);
         for (int ii = 0, ll = _bods.size(); ii < ll; ii++) _bods.get(ii).update(delta);
     }
 
-    @Override public void paint (float alpha) {
-        super.paint(alpha);
-        for (int ii = 0, ll = _bods.size(); ii < ll; ii++) _bods.get(ii).paint(alpha);
+    @Override public void paint (Clock clock) {
+        super.paint(clock);
+        for (int ii = 0, ll = _bods.size(); ii < ll; ii++) _bods.get(ii).paint(clock);
     }
 
     protected BouncingQuads (int images, int subImages, boolean sorted, boolean useLayers) {

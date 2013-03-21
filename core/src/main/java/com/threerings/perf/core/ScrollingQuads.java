@@ -8,9 +8,10 @@ import java.util.Random;
 
 import pythagoras.d.MathUtil;
 
-import playn.core.ImmediateLayer;
 import playn.core.Image;
+import playn.core.ImmediateLayer;
 import playn.core.Surface;
+import playn.core.util.Clock;
 import static playn.core.PlayN.graphics;
 
 import tripleplay.util.Hud;
@@ -50,7 +51,7 @@ public class ScrollingQuads extends AbstractTest
         }));
     }
 
-    @Override public void update (float delta) {
+    @Override public void update (int delta) {
         super.update(delta);
         _cx = _nx;
         _cy = _ny;
@@ -58,8 +59,9 @@ public class ScrollingQuads extends AbstractTest
         _ny = _cy + delta * _vy;
     }
 
-    @Override public void paint (float alpha) {
-        super.paint(alpha);
+    @Override public void paint (Clock clock) {
+        super.paint(clock);
+        float alpha = clock.alpha();
         _px = _cx + (_nx - _cx) * alpha;
         _py = _cy + (_ny - _cy) * alpha;
     }
