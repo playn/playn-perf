@@ -6,10 +6,6 @@ package com.threerings.perf.core;
 
 import java.util.Random;
 
-import pythagoras.d.Point;
-import pythagoras.d.Vector;
-
-import playn.core.CanvasImage;
 import playn.core.GroupLayer;
 import playn.core.Image;
 import playn.core.ImmediateLayer;
@@ -19,14 +15,12 @@ import playn.core.util.Clock;
 import static playn.core.PlayN.graphics;
 
 import react.IntValue;
-import react.UnitSlot;
 import react.Value;
 
 import tripleplay.ui.CheckBox;
 import tripleplay.ui.Slider;
 import tripleplay.util.DestroyableList;
 import tripleplay.util.Hud;
-import tripleplay.util.Ref;
 
 /**
  * Displays a bunch of quads bouncing around the screen, using a range of up to four textures and

@@ -6,12 +6,9 @@ package com.threerings.perf.core;
 
 import pythagoras.d.MathUtil;
 
-import react.UnitSlot;
-
 import playn.core.Font;
 import static playn.core.PlayN.graphics;
 
-import tripleplay.game.Screen;
 import tripleplay.game.UIScreen;
 import tripleplay.ui.Background;
 import tripleplay.ui.Label;

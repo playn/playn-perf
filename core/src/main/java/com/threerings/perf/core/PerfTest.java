@@ -6,8 +6,6 @@ package com.threerings.perf.core;
 
 import playn.core.Game;
 import playn.core.util.Clock;
-import static playn.core.PlayN.*;
-
 import tripleplay.game.ScreenStack;
 
 public class PerfTest extends Game.Default

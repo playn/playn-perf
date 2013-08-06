@@ -4,22 +4,15 @@
 
 package com.threerings.perf.core;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import react.Value;
-
 import playn.core.Image;
 import playn.core.Keyboard;
 import playn.core.Mouse;
 import playn.core.Pointer;
-import playn.core.gl.GLContext;
 import playn.core.util.Clock;
 import static playn.core.PlayN.*;
 
 import tripleplay.game.Screen;
 import tripleplay.util.Hud;
-import tripleplay.util.Ref;
 
 /**
  * The base class for a performance test.
