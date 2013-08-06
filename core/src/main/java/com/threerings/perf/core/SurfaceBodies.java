@@ -36,8 +36,7 @@ public class SurfaceBodies extends LayerBodies
      */
     public void init (Viz viz, Init init) {
         super.init(init);
-        float[] data = _data;
-        for (int ii = 0, oo = 0, ll = _images.length; ii < ll; ii++, oo += FIELDS) {
+        for (int ii = 0, ll = _images.length; ii < ll; ii++) {
             _images[ii] = viz.createViz(ii);
         }
     }
