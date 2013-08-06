@@ -24,7 +24,7 @@ public class ScrollingQuads extends AbstractTest
 {
     public static TestConfig config () {
         return new TestConfig() {
-            protected AbstractTest create () {
+            @Override protected AbstractTest create () {
                 return new ScrollingQuads();
             }
 

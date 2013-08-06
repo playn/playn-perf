@@ -43,7 +43,7 @@ public abstract class TestConfig extends Group
 
     protected void addStartButton () {
         Button start = new Button("Start");
-        start.clicked().connect(new UnitSlot() { public void onEmit () {
+        start.clicked().connect(new UnitSlot() { @Override public void onEmit () {
             PerfTest.stack.push(create());
         }});
         add(TableLayout.colspan(start, 2));

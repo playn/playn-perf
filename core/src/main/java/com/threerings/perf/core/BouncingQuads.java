@@ -31,7 +31,7 @@ public class BouncingQuads extends AbstractTest
 {
     public static TestConfig config () {
         return new TestConfig() {
-            protected AbstractTest create () {
+            @Override protected AbstractTest create () {
                 return new BouncingQuads(_images.value.get().intValue(),
                                          _subImages.value.get().intValue(),
                                          _sorted.checked.get(),
