@@ -12,7 +12,9 @@ namespace com.threerings.perf
   public partial class AppDelegate : IOSApplicationDelegate {
     public override bool FinishedLaunching (UIApplication app, NSDictionary options) {
       app.SetStatusBarHidden(true, true);
-      IOSPlatform.register(app, IOSPlatform.SupportedOrients.PORTRAITS);
+      IOSPlatform.Config config = new IOSPlatform.Config();
+      config.orients = IOSPlatform.SupportedOrients.PORTRAITS;
+      IOSPlatform.register(app, config);
       PlayN.run(new PerfTest());
       return true;
     }
