@@ -57,7 +57,7 @@ public class Particles extends AbstractTest
                 _emitter.generator = Generator.constant(value);
                 _emitter.initters.add(Lifespan.random(_rando, 1, 1.5f));
                 _emitter.initters.add(Color.constant(Colors.RED));
-                _emitter.initters.add(Transform.identity());
+                _emitter.initters.add(Transform.layer(_emitter.layer));
                 _emitter.initters.add(Velocity.randomNormal(_rando, 50, 200));
                 _emitter.effectors.add(Alpha.byAge(Interpolator.EASE_IN));
                 _emitter.effectors.add(new Gravity(30));
