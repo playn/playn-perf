@@ -1,3 +1,7 @@
+//
+// PlayN Performance Tests
+// http://github.com/threerings/playn-perf/blob/master/LICENSE
+
 package com.threerings.perf.core;
 
 import java.util.Random;
@@ -9,6 +13,7 @@ import react.IntValue;
 import react.ValueView.Listener;
 import tripleplay.particle.Emitter;
 import tripleplay.particle.Generator;
+import tripleplay.particle.Particles;
 import tripleplay.particle.effect.Alpha;
 import tripleplay.particle.effect.Gravity;
 import tripleplay.particle.effect.Move;
@@ -21,18 +26,18 @@ import tripleplay.util.Hud;
 import tripleplay.util.Interpolator;
 import tripleplay.util.Randoms;
 
-public class Particles extends AbstractTest
+public class ParticleBurst extends AbstractTest
 {
     public static final int BATCH = 5000;
 
     public static TestConfig config () {
         return new TestConfig() {
             @Override protected AbstractTest create () {
-                return new Particles();
+                return new ParticleBurst();
             }
 
             /* init */ {
-                addHeader("Particles");
+                addHeader("Particle Burst");
                 // TODO: any config params?
                 addStartButton();
             }
@@ -91,7 +96,7 @@ public class Particles extends AbstractTest
     }
 
     protected Emitter _emitter;
-    protected final tripleplay.particle.Particles _particles = new tripleplay.particle.Particles();
+    protected final Particles _particles = new Particles();
     protected final Randoms _rando = Randoms.with(new Random());
     protected final IntValue _count = new IntValue(BATCH);
 }
