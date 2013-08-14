@@ -37,6 +37,7 @@ public class TestMenu extends UIScreen
                                          Style.FONT.is(HEADER_FONT)), cols));
         root.add(BouncingQuads.config().addStyles(Style.BACKGROUND.is(configBG)));
         root.add(ScrollingQuads.config().addStyles(Style.BACKGROUND.is(configBG)));
+        root.add(Particles.config().addStyles(Style.BACKGROUND.is(configBG)));
     }
 
     @Override public void wasRemoved () {
